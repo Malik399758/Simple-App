@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wireless Recon Lab | Network Scanner</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">WR</div>
+        <div><strong>WIRELESS RECON</strong><small>LAB CONSOLE</small></div>
+      </div>
+      <div class="side-label">WORKSPACE</div>
+      <a class="nav-item active" href="#overview"><span>▦</span> Overview</a>
+      <a class="nav-item" href="#scanner"><span>⌁</span> Network scanner</a>
+      <a class="nav-item" href="#learn"><span>⌘</span> Field guide</a>
+      <a class="nav-item" href="#tasks"><span>✓</span> Lab checklist</a>
+      <div class="sidebar-note">
+        <div class="status-dot"></div>
+        <div><b>Local lab environment</b><small>Read-only discovery</small></div>
+      </div>
+      <div class="side-footer">EDUCATIONAL USE ONLY<br>Scan networks you own or have permission to assess.</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <div class="eyebrow">WIRELESS SECURITY / PRACTICAL 05</div>
+          <h1>Network Scanning &amp; Reconnaissance</h1>
+          <p class="subtitle">Discover visible wireless networks and interpret their broadcast metadata.</p>
+        </div>
+        <div class="top-status"><span class="status-dot"></span> SCANNER READY</div>
+      </header>
+
+      <section id="overview" class="stats-grid">
+        <article class="stat-card"><div class="stat-label">NETWORKS FOUND</div><div class="stat-value" id="stat-total">—</div><div class="stat-foot">Visible access points</div></article>
+        <article class="stat-card"><div class="stat-label">STRONG SIGNALS</div><div class="stat-value" id="stat-strong">—</div><div class="stat-foot">Signal at or above 70%</div></article>
+        <article class="stat-card"><div class="stat-label">SECURITY UNKNOWN</div><div class="stat-value" id="stat-unknown">—</div><div class="stat-foot">Verify before connecting</div></article>
+        <article class="stat-card"><div class="stat-label">LAST SCAN</div><div class="stat-value time-value" id="stat-time">Not run</div><div class="stat-foot" id="stat-mode">Choose a scan mode</div></article>
+      </section>
+
+      <section id="scanner" class="panel scanner-panel">
+        <div class="panel-heading">
+          <div><div class="eyebrow">DISCOVERY MODULE</div><h2>Wireless environment</h2></div>
+          <span class="live-pill"><span class="status-dot"></span> LOCAL ONLY</span>
+        </div>
+        <div class="scan-toolbar">
+          <div class="mode-switch" role="group" aria-label="Scan mode">
+            <button class="mode-button selected" id="demo-mode" onclick="setMode('demo')">Demo mode</button>
+            <button class="mode-button" id="live-mode" onclick="setMode('live')">Live Windows scan</button>
+          </div>
+          <button class="primary-button" id="scan-button" onclick="runScan()">↻ &nbsp; Start scan</button>
+        </div>
+        <div class="mode-description" id="mode-description">Demo mode displays fictional sample networks so you can practise safely without scanning the air.</div>
+        <div id="notice" class="notice" role="status">Select a mode and click <b>Start scan</b>.</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>NETWORK / SSID</th><th>BSSID</th><th>SIGNAL</th><th>CHANNEL</th><th>SECURITY</th><th>RADIO</th></tr></thead>
+            <tbody id="network-rows"><tr><td class="empty" colspan="6">No scan results yet. Start a scan to populate this table.</td></tr></tbody>
+          </table>
+        </div>
+        <div class="table-foot"><span id="result-count">0 records</span><span>Results are read-only; no passwords are collected.</span></div>
+      </section>
+
+      <section class="lower-grid">
+        <article id="learn" class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">QUICK REFERENCE</div><h2>Field guide</h2></div><span class="icon-badge">⌘</span></div>
+          <div class="field-list">
+            <div class="field-row"><span class="field-key">SSID</span><div><b>Wi-Fi network name</b><p>The name users see when choosing a wireless network.</p></div></div>
+            <div class="field-row"><span class="field-key">BSSID</span><div><b>Access point radio MAC address</b><p>Identifies a particular wireless access point/radio. One SSID can have multiple BSSIDs.</p></div></div>
+            <div class="field-row"><span class="field-key">Signal</span><div><b>Reported signal percentage</b><p>A rough indicator from Windows, not a precise distance measurement.</p></div></div>
+            <div class="field-row"><span class="field-key">Channel</span><div><b>Radio channel in use</b><p>Nearby networks sharing channels may experience congestion or interference.</p></div></div>
+            <div class="field-row"><span class="field-key">Security</span><div><b>Authentication / encryption</b><p>Shows the security advertised by the access point; it does not prove a network is trustworthy.</p></div></div>
+          </div>
+        </article>
+
+        <article id="tasks" class="panel">
+          <div class="panel-heading"><div><div class="eyebrow">STUDENT PRACTICAL</div><h2>Lab checklist</h2></div><span class="icon-badge">✓</span></div>
+          <p class="task-intro">Complete these observations and discuss them with your instructor.</p>
+          <label class="task"><input type="checkbox"> Identify the SSID and BSSID of two visible networks.</label>
+          <label class="task"><input type="checkbox"> Find the network with the strongest reported signal.</label>
+          <label class="task"><input type="checkbox"> Compare the security types shown in the results.</label>
+          <label class="task"><input type="checkbox"> Note which networks use the same channel.</label>
+          <label class="task"><input type="checkbox"> Explain why a visible SSID alone does not prove a network is safe.</label>
+          <button class="secondary-button" onclick="copyReport()">Copy observation report</button>
+          <p class="task-help" id="copy-help">Run a scan first to include results in your report.</p>
+        </article>
+      </section>
+      <footer>Wireless Recon Lab <span>•</span> Educational dashboard <span>•</span> No packet injection or password attacks</footer>
+    </main>
+  </div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
